@@ -1,0 +1,6 @@
+{
+  "name": "Teacher's Day Contribution",
+  "description": "A celebration and contribution portal for Teacher's Day featuring live statistics, collective gift tracker, and gratitude messages synced with Google Sheets.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

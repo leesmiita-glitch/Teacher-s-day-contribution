@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
-import { Sparkles, Quote, Shuffle, MessageCircleHeart, Leaf } from 'lucide-react';
+import { Sparkles, Quote, Shuffle, MessageCircleHeart } from 'lucide-react';
 import { Contribution } from '../types';
 
 interface WishesWallProps {
   contributions: Contribution[];
-  onOpenContribute: () => void;
 }
 
-export function WishesWall({ contributions, onOpenContribute }: WishesWallProps) {
+export function WishesWall({ contributions }: WishesWallProps) {
   const [featuredIndex, setFeaturedIndex] = useState(0);
 
   const quotesList = contributions.filter((c) => c.quote && c.quote.length > 5);
@@ -97,16 +96,7 @@ export function WishesWall({ contributions, onOpenContribute }: WishesWallProps)
           </div>
         ))}
       </div>
-
-      <div className="text-center mt-10">
-        <button
-          onClick={onOpenContribute}
-          className="px-8 py-3.5 bg-[#5A6F54] text-white text-sm font-semibold rounded-full hover:bg-[#475943] hover:shadow-lg transition-all shadow-sm active:scale-95 flex items-center gap-2 mx-auto cursor-pointer"
-        >
-          <Leaf className="w-4 h-4" />
-          <span>Add Your Heartfelt Teacher's Day Message</span>
-        </button>
-      </div>
     </section>
   );
 }
+

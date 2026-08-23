@@ -1,5 +1,5 @@
 import Papa from 'papaparse';
-import { Contribution, SheetStats } from '../types';
+import { Contribution, ReceiverStats, SheetStats } from '../types';
 
 // Read Google Sheet CSV URL from environment variable
 export const SHEET_CSV_URL: string =
@@ -12,7 +12,16 @@ const CACHE_STORAGE_KEY = 'teachers_day_sheet_cache_v2';
 
 // 1st Year CSE Batch Configuration
 export const TOTAL_CSE_STUDENTS = 52;
-export const DEFAULT_TARGET_AMOUNT = 50000;
+export const DEFAULT_TARGET_AMOUNT = 8000;
+
+export function normalizeReceiver(receiverRaw: string): string {
+  if (!receiverRaw) return 'Unassigned';
+  const clean = receiverRaw.trim();
+  const lower = clean.toLowerCase();
+  if (lower.includes('khushi')) return 'Khushi';
+  if (lower.includes('aditya')) return 'Aditya';
+  return clean.charAt(0).toUpperCase() + clean.slice(1);
+}
 
 export function getLocalContributions(): Contribution[] {
   try {
@@ -137,7 +146,8 @@ export function parseCsvData(csvText: string): Contribution[] {
         lower.includes('branch') ||
         lower.includes('date') ||
         lower.includes('amount') ||
-        lower.includes('status'))
+        lower.includes('status') ||
+        lower.includes('receiver'))
     );
   });
 
@@ -176,7 +186,7 @@ export function parseCsvData(csvText: string): Contribution[] {
       let rollNo = colRollNo;
 
       const isIdLike = (str: string) => /^[A-Z0-9]+-[0-9]+/i.test(str) || /^[0-9]+$/.test(str);
-      const isNameLike = (str: string) => /^[a-zA-Z\s.]+$/.test(str) && str.includes(' ');
+      const isNameLike = (str: string) => !isIdLike(str) && /^[a-zA-Z\s.]+$/.test(str);
 
       if (isIdLike(colStudentName) && isNameLike(colRollNo)) {
         name = colRollNo;
@@ -194,9 +204,14 @@ export function parseCsvData(csvText: string): Contribution[] {
       const amount = parseFloat(amountRaw.replace(/[^0-9.]/g, '')) || 0;
       
       const date = getField(['Payment date', 'Payment Date', 'Date', 'Paid Date']) || new Date().toISOString().split('T')[0];
-      const receiver = getField(['Receiver', 'Received By', 'Collected By']);
+      const receiverRaw = getField(['Receiver', 'Received By', 'Collected By', 'Collector', 'ReceivedBy', 'Payment Receiver']);
+      const receiver = normalizeReceiver(receiverRaw);
+      const status = getField(['Status', 'Payment Status', 'Payment status', 'Payment Status ']) || 'PAID';
+
       const quote = getField(['Quote', 'Message', 'Wishes']) ||
-        (receiver ? `Contribution confirmed & received by ${receiver}` : 'Thank you teachers for guiding and inspiring us!');
+        (receiver && receiver !== 'Unassigned'
+          ? `Contribution confirmed & received by ${receiver}`
+          : 'Thank you teachers for guiding and inspiring us!');
 
       return {
         id: `sheet-${index}-${name.replace(/\s+/g, '')}`,
@@ -208,6 +223,8 @@ export function parseCsvData(csvText: string): Contribution[] {
         amount,
         date,
         quote,
+        receiver,
+        status,
         isLocal: false,
       };
     })
@@ -263,6 +280,44 @@ export function computeStats(
     CSE: totalAmount,
   };
 
+  // Compute breakdown for receivers (Khushi, Aditya, etc.)
+  const getReceiverStats = (targetName: string, displayName: string): ReceiverStats => {
+    const filtered = all.filter((c) => (c.receiver || '').toLowerCase() === targetName.toLowerCase());
+    const total = filtered.reduce((sum, item) => sum + (item.amount || 0), 0);
+    const count = filtered.length;
+    const percentage = totalAmount > 0 ? parseFloat(((total / totalAmount) * 100).toFixed(1)) : 0;
+    return {
+      name: targetName,
+      displayName,
+      totalAmount: total,
+      count,
+      percentage,
+      recentContributions: filtered.slice(0, 5),
+    };
+  };
+
+  const khushiStats = getReceiverStats('Khushi', 'Khushi');
+  const adityaStats = getReceiverStats('Aditya', 'Aditya');
+
+  const othersList = all.filter((c) => {
+    const r = (c.receiver || '').toLowerCase();
+    return r !== 'khushi' && r !== 'aditya';
+  });
+  const othersTotal = othersList.reduce((sum, item) => sum + (item.amount || 0), 0);
+  const othersStats: ReceiverStats = {
+    name: 'Others',
+    displayName: 'Other Coordinators',
+    totalAmount: othersTotal,
+    count: othersList.length,
+    percentage: totalAmount > 0 ? parseFloat(((othersTotal / totalAmount) * 100).toFixed(1)) : 0,
+    recentContributions: othersList.slice(0, 5),
+  };
+
+  const allReceivers: ReceiverStats[] = [khushiStats, adityaStats];
+  if (othersStats.count > 0) {
+    allReceivers.push(othersStats);
+  }
+
   const progressPercent = Math.min(100, parseFloat(((totalAmount / target) * 100).toFixed(1)));
 
   return {
@@ -275,6 +330,13 @@ export function computeStats(
     paidStudentsCount,
     participationPercent,
     branchBreakdown,
+    receiverBreakdown: {
+      khushi: khushiStats,
+      aditya: adityaStats,
+      others: othersStats,
+      allReceivers,
+    },
     latestDate: latestDateStr || todayIndian,
   };
 }
+

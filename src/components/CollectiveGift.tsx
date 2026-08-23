@@ -4,10 +4,9 @@ import { SheetStats } from '../types';
 
 interface CollectiveGiftProps {
   stats: SheetStats;
-  onOpenContribute: () => void;
 }
 
-export function CollectiveGift({ stats, onOpenContribute }: CollectiveGiftProps) {
+export function CollectiveGift({ stats }: CollectiveGiftProps) {
   const formatCurrency = (val: number) => {
     return new Intl.NumberFormat('en-IN').format(val);
   };
@@ -96,3 +95,4 @@ export function CollectiveGift({ stats, onOpenContribute }: CollectiveGiftProps)
     </section>
   );
 }
+

@@ -1,13 +1,12 @@
 import React, { useState, useMemo } from 'react';
-import { Search, MessageSquareHeart, X } from 'lucide-react';
+import { Search, MessageSquareHeart, X, CheckCircle2 } from 'lucide-react';
 import { Contribution } from '../types';
 
 interface RecentLoveProps {
   contributions: Contribution[];
-  onOpenContribute: () => void;
 }
 
-export function RecentLove({ contributions, onOpenContribute }: RecentLoveProps) {
+export function RecentLove({ contributions }: RecentLoveProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedContribution, setSelectedContribution] = useState<Contribution | null>(null);
 
@@ -19,6 +18,7 @@ export function RecentLove({ contributions, onOpenContribute }: RecentLoveProps)
       return (
         item.name.toLowerCase().includes(q) ||
         (item.rollNo && item.rollNo.toLowerCase().includes(q)) ||
+        (item.receiver && item.receiver.toLowerCase().includes(q)) ||
         (item.quote && item.quote.toLowerCase().includes(q))
       );
     });
@@ -31,6 +31,17 @@ export function RecentLove({ contributions, onOpenContribute }: RecentLoveProps)
   const getInitial = (name: string) => {
     if (!name) return 'S';
     return name.trim().charAt(0).toUpperCase();
+  };
+
+  const getReceiverBadgeStyle = (receiver?: string) => {
+    const r = (receiver || '').toLowerCase();
+    if (r === 'khushi') {
+      return 'bg-[#E5EADF] text-[#5A6F54] border-[#5A6F54]/30';
+    }
+    if (r === 'aditya') {
+      return 'bg-[#F5E6DA] text-[#8B6E4E] border-[#D4A373]/40';
+    }
+    return 'bg-[#F5F4EF] text-[#8C897E] border-[#E8E6DF]';
   };
 
   return (
@@ -53,13 +64,13 @@ export function RecentLove({ contributions, onOpenContribute }: RecentLoveProps)
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search student name or message..."
+            placeholder="Search student, roll, or coordinator..."
             className="w-full pl-9 pr-4 py-2.5 rounded-full border border-[#E8E6DF] bg-white focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#5A6F54]/30 text-sm transition-all shadow-sm text-[#3D3D3D]"
           />
           {searchQuery && (
             <button
               onClick={() => setSearchQuery('')}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-[#8C897E] hover:text-[#5A6F54]"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-[#8C897E] hover:text-[#5A6F54] cursor-pointer"
             >
               Clear
             </button>
@@ -81,16 +92,8 @@ export function RecentLove({ contributions, onOpenContribute }: RecentLoveProps)
             <MessageSquareHeart className="w-10 h-10 mx-auto text-[#5A6F54]/40 mb-3" />
             <p className="font-serif text-lg text-[#3D3D3D]">No contributions found</p>
             <p className="text-sm mt-1">
-              {searchQuery
-                ? 'Try a different search term.'
-                : 'Be the first 1st Year CSE student to contribute!'}
+              {searchQuery ? 'Try a different search term.' : 'Records will appear as synced from the Google Sheet.'}
             </p>
-            <button
-              onClick={onOpenContribute}
-              className="mt-4 px-5 py-2 rounded-full bg-[#5A6F54] text-white text-xs font-semibold uppercase tracking-wider hover:bg-[#475943] transition-all cursor-pointer"
-            >
-              Contribute Now
-            </button>
           </div>
         ) : (
           filtered.map((item, index) => (
@@ -105,7 +108,7 @@ export function RecentLove({ contributions, onOpenContribute }: RecentLoveProps)
                   {getInitial(item.name)}
                 </div>
 
-                {/* Name & Quote */}
+                {/* Name, Roll & Receiver Badge */}
                 <div className="min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
                     <p className="font-semibold text-sm sm:text-base text-[#3D3D3D] group-hover:text-[#5A6F54] transition-colors truncate">
@@ -114,9 +117,19 @@ export function RecentLove({ contributions, onOpenContribute }: RecentLoveProps)
                     <span className="text-[11px] font-medium px-2 py-0.5 rounded-md bg-[#F5F4EF] text-[#8C897E] border border-[#E8E6DF]/60">
                       1st Year • CSE {item.rollNo ? `(Roll: ${item.rollNo})` : ''}
                     </span>
+                    {item.receiver && item.receiver !== 'Unassigned' && (
+                      <span
+                        className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md border flex items-center gap-1 ${getReceiverBadgeStyle(
+                          item.receiver
+                        )}`}
+                      >
+                        <CheckCircle2 className="w-2.5 h-2.5" />
+                        <span>Recv: {item.receiver}</span>
+                      </span>
+                    )}
                     {item.isLocal && (
                       <span className="text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-[#E5EADF] text-[#5A6F54]">
-                        New
+                        Local
                       </span>
                     )}
                   </div>
@@ -147,7 +160,7 @@ export function RecentLove({ contributions, onOpenContribute }: RecentLoveProps)
           >
             <button
               onClick={() => setSelectedContribution(null)}
-              className="absolute right-4 top-4 text-[#8C897E] hover:text-[#3D3D3D] p-1 rounded-full cursor-pointer"
+              className="absolute right-4 top-4 text-[#8C897E] hover:text-[#3D3D3D] p-1.5 rounded-full bg-[#F5F4EF] cursor-pointer"
             >
               <X className="w-5 h-5" />
             </button>
@@ -164,6 +177,11 @@ export function RecentLove({ contributions, onOpenContribute }: RecentLoveProps)
                   1st Year • CSE {selectedContribution.rollNo ? `(Roll: ${selectedContribution.rollNo})` : ''} • Date:{' '}
                   {selectedContribution.date}
                 </p>
+                {selectedContribution.receiver && (
+                  <p className="text-xs font-semibold text-[#5A6F54] mt-0.5">
+                    Received & Confirmed by: {selectedContribution.receiver}
+                  </p>
+                )}
               </div>
             </div>
 
@@ -175,7 +193,10 @@ export function RecentLove({ contributions, onOpenContribute }: RecentLoveProps)
 
             <div className="flex justify-between items-center pt-2">
               <div className="text-xs font-semibold uppercase tracking-wider text-[#8C897E]">
-                Contribution: <span className="text-[#5A6F54] font-bold text-base">₹{formatCurrency(selectedContribution.amount)}</span>
+                Contribution:{' '}
+                <span className="text-[#5A6F54] font-bold text-base">
+                  ₹{formatCurrency(selectedContribution.amount)}
+                </span>
               </div>
               <button
                 onClick={() => setSelectedContribution(null)}
@@ -190,3 +211,4 @@ export function RecentLove({ contributions, onOpenContribute }: RecentLoveProps)
     </section>
   );
 }
+

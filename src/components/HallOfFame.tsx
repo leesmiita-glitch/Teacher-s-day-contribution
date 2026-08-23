@@ -5,10 +5,9 @@ import { Contribution, SheetStats } from '../types';
 interface HallOfFameProps {
   contributions: Contribution[];
   stats: SheetStats;
-  onOpenContribute: () => void;
 }
 
-export function HallOfFame({ contributions, stats, onOpenContribute }: HallOfFameProps) {
+export function HallOfFame({ contributions, stats }: HallOfFameProps) {
   const formatCurrency = (val: number) => {
     return new Intl.NumberFormat('en-IN').format(val);
   };
@@ -75,7 +74,7 @@ export function HallOfFame({ contributions, stats, onOpenContribute }: HallOfFam
         </p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-10">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
         {/* 1st Year CSE Students Paid Circle Card */}
         <div className="bg-white rounded-3xl p-6 shadow-sm border border-[#E8E6DF] lg:col-span-1 flex flex-col justify-between">
           <div>
@@ -170,7 +169,7 @@ export function HallOfFame({ contributions, stats, onOpenContribute }: HallOfFam
             <div className="py-12 text-center text-[#8C897E]">
               <Leaf className="w-8 h-8 mx-auto text-[#5A6F54]/40 mb-2" />
               <p className="font-serif text-base text-[#3D3D3D]">No contributions recorded yet</p>
-              <p className="text-xs mt-1">Be the first 1st Year CSE student to contribute!</p>
+              <p className="text-xs mt-1">Records will appear live from the Google Sheet.</p>
             </div>
           ) : (
             <div className="space-y-2.5">
@@ -183,9 +182,14 @@ export function HallOfFame({ contributions, stats, onOpenContribute }: HallOfFam
                     {getRankBadge(idx)}
                     <div className="min-w-0">
                       <p className="font-semibold text-sm text-[#3D3D3D] truncate">{c.name}</p>
-                      <p className="text-xs text-[#8C897E]">
-                        1st Year • CSE {c.rollNo ? `(Roll: ${c.rollNo})` : ''}
-                      </p>
+                      <div className="flex items-center gap-2 text-xs text-[#8C897E]">
+                        <span>1st Year • CSE {c.rollNo ? `(Roll: ${c.rollNo})` : ''}</span>
+                        {c.receiver && (
+                          <span className="text-[10px] text-[#5A6F54] font-medium bg-[#E5EADF] px-1.5 py-0.2 rounded">
+                            {c.receiver}
+                          </span>
+                        )}
+                      </div>
                     </div>
                   </div>
 
@@ -198,17 +202,7 @@ export function HallOfFame({ contributions, stats, onOpenContribute }: HallOfFam
           )}
         </div>
       </div>
-
-      {/* Call to action */}
-      <div className="text-center pt-2">
-        <button
-          onClick={onOpenContribute}
-          className="px-8 py-3.5 bg-[#5A6F54] text-white text-sm font-semibold rounded-full hover:bg-[#475943] hover:shadow-lg transition-all shadow-sm active:scale-95 flex items-center gap-2 mx-auto cursor-pointer"
-        >
-          <Leaf className="w-4 h-4" />
-          <span>Contribute as 1st Year CSE Student</span>
-        </button>
-      </div>
     </section>
   );
 }
+

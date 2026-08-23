@@ -1,20 +1,43 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
-</div>
+# Teacher's Day Contribution Dashboard
 
-# Run and deploy your AI Studio app
+A beautiful, dynamic web application to track and display student contributions, wishes, and statistics for Teacher's Day celebrations. The app reads data in real-time from a published Google Sheet CSV and visualizes it using React and Tailwind CSS.
 
-This contains everything you need to run your app locally.
+## Features
 
-View your app in AI Studio: https://ai.studio/apps/948d70de-5be5-4c54-9d2b-100793c4dadf
+- **Live Data**: Fetches and parses contribution data directly from a Google Sheet CSV.
+- **Statistics & Progress**: Tracks collection progress against a target amount.
+- **Coordinator Breakdown**: Displays a comparative breakdown of collections managed by student coordinators.
+- **Wishes Wall**: A masonry layout to display heartfelt messages left by students.
+- **Hall of Fame**: A searchable, paginated table of all contributors.
 
-## Run Locally
+## Tech Stack
 
-**Prerequisites:**  Node.js
+- [React](https://reactjs.org/) + [Vite](https://vitejs.dev/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [PapaParse](https://www.papaparse.com/) (CSV Parsing)
+- [Lucide React](https://lucide.dev/) (Icons)
 
+## Setup & Running Locally
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+**Prerequisites:** Node.js installed on your machine.
+
+1. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+
+2. **Configure Environment Variables:**
+   Create a `.env` file in the root of the project and set your Google Sheet CSV URL:
+   ```env
+   VITE_GOOGLE_SHEET_CSV_URL=https://docs.google.com/spreadsheets/d/e/YOUR_SHEET_ID/pub?output=csv
+   ```
+   *(Ensure your Google Sheet is published to the web as a CSV).*
+
+3. **Start the development server:**
+   ```bash
+   npm run dev
+   ```
+
+## Author
+Made by [Jaysmita](https://github.com/leesmiita-glitch)

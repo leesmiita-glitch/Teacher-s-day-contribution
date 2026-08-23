@@ -1,14 +1,25 @@
 import React from 'react';
-import { Leaf, ArrowRight } from 'lucide-react';
+import { Leaf, ArrowRight, ShieldCheck } from 'lucide-react';
 
 interface HeroProps {
-  onOpenContribute: () => void;
   onViewContributions: () => void;
+  onViewReceivers?: () => void;
 }
 
-export function Hero({ onOpenContribute, onViewContributions }: HeroProps) {
+export function Hero({ onViewContributions, onViewReceivers }: HeroProps) {
+  const handleScrollToReceivers = () => {
+    if (onViewReceivers) {
+      onViewReceivers();
+    } else {
+      const el = document.getElementById('receivers-section');
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  };
+
   return (
-    <section className="relative px-4 sm:px-6 lg:px-8 pt-10 sm:pt-14 pb-16 overflow-hidden flex flex-col items-center text-center z-20">
+    <section className="relative px-4 sm:px-6 lg:px-8 pt-10 sm:pt-14 pb-14 overflow-hidden flex flex-col items-center text-center z-20">
       {/* Decorative Natural Watercolor / Botanical Elements */}
       <div
         className="absolute -top-10 -left-10 w-48 sm:w-64 h-48 sm:h-64 opacity-40 float-animation pointer-events-none mix-blend-multiply select-none"
@@ -34,7 +45,7 @@ export function Hero({ onOpenContribute, onViewContributions }: HeroProps) {
       {/* Main Content */}
       <div className="relative z-10 max-w-2xl mx-auto space-y-4">
         {/* Subtle pill tag */}
-        <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#E5EADF] text-[#5A6F54] text-xs font-semibold uppercase tracking-wider mb-1">
+        <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#E5EADF] text-[#5A6F54] text-xs font-semibold uppercase tracking-wider mb-1 shadow-xs">
           <Leaf className="w-3.5 h-3.5" />
           <span>1st Year CSE (52 Students) • Appreciation Tribute</span>
         </div>
@@ -50,20 +61,20 @@ export function Hero({ onOpenContribute, onViewContributions }: HeroProps) {
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-6 max-w-md mx-auto w-full">
           <button
-            onClick={onOpenContribute}
+            onClick={onViewContributions}
             className="w-full sm:w-auto bg-[#5A6F54] text-white text-base font-semibold px-8 py-3.5 rounded-full hover:bg-[#475943] hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 shadow-md active:scale-95 active:translate-y-0 flex items-center justify-center gap-2 group cursor-pointer"
           >
-            <span>Contribute Now</span>
-            <Leaf className="w-4 h-4 group-hover:rotate-12 transition-transform" />
+            <span>View Contributions</span>
+            <ArrowRight className="w-4 h-4 text-white/90 group-hover:translate-x-0.5 transition-transform" />
           </button>
 
           <button
-            onClick={onViewContributions}
-            className="w-full sm:w-auto border border-[#E8E6DF] text-[#3D3D3D] text-base font-medium px-8 py-3.5 rounded-full bg-white hover:bg-[#F5F4EF] hover:border-[#D4A373] hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 relative overflow-hidden group cursor-pointer"
+            onClick={handleScrollToReceivers}
+            className="w-full sm:w-auto border border-[#E8E6DF] text-[#3D3D3D] text-base font-medium px-7 py-3.5 rounded-full bg-white hover:bg-[#F5F4EF] hover:border-[#D4A373] hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 relative overflow-hidden group cursor-pointer"
           >
             <span className="relative z-10 flex items-center justify-center gap-2">
-              <span>View Contributions</span>
-              <ArrowRight className="w-4 h-4 text-[#8C897E] group-hover:text-[#5A6F54] group-hover:translate-x-0.5 transition-all" />
+              <ShieldCheck className="w-4 h-4 text-[#D4A373] group-hover:text-[#5A6F54] transition-colors" />
+              <span>Khushi & Aditya Collection</span>
             </span>
             <div className="absolute inset-0 shimmer-effect opacity-0 group-hover:opacity-100 transition-opacity" />
           </button>
@@ -72,3 +83,4 @@ export function Hero({ onOpenContribute, onViewContributions }: HeroProps) {
     </section>
   );
 }
+

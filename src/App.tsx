@@ -3,9 +3,9 @@ import { AlertCircle, RefreshCw } from 'lucide-react';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { StatsGrid } from './components/StatsGrid';
+import { ReceiverBreakdown } from './components/ReceiverBreakdown';
 import { CollectiveGift } from './components/CollectiveGift';
 import { RecentLove } from './components/RecentLove';
-import { ContributeModal } from './components/ContributeModal';
 import { HallOfFame } from './components/HallOfFame';
 import { WishesWall } from './components/WishesWall';
 import { Footer } from './components/Footer';
@@ -13,7 +13,6 @@ import { PetalCanvas } from './components/PetalCanvas';
 import {
   fetchContributionsFromSheet,
   getLocalContributions,
-  saveLocalContribution,
   computeStats,
 } from './services/sheetService';
 import { Contribution, SheetStats, ViewTab } from './types';
@@ -25,10 +24,9 @@ export default function App() {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isFromCache, setIsFromCache] = useState(false);
   const [currentTab, setCurrentTab] = useState<ViewTab>('home');
-  const [isContributeModalOpen, setIsContributeModalOpen] = useState(false);
   const [fetchError, setFetchError] = useState<string | null>(null);
 
-  // Load local contributions from storage
+  // Load local contributions from storage if any
   useEffect(() => {
     const saved = getLocalContributions();
     setLocalData(saved);
@@ -69,11 +67,6 @@ export default function App() {
   const allContributions = [...localData, ...sheetData];
   const stats: SheetStats = computeStats(sheetData, localData);
 
-  const handleAddContribution = (newContrib: Omit<Contribution, 'id' | 'isLocal'>) => {
-    const created = saveLocalContribution(newContrib);
-    setLocalData((prev) => [created, ...prev]);
-  };
-
   const handleViewContributions = () => {
     if (currentTab === 'home') {
       const el = document.getElementById('recent-love-section');
@@ -87,6 +80,21 @@ export default function App() {
     }
   };
 
+  const handleViewReceivers = () => {
+    if (currentTab === 'home') {
+      const el = document.getElementById('receivers-section');
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' });
+      }
+    } else {
+      setCurrentTab('home');
+      setTimeout(() => {
+        const el = document.getElementById('receivers-section');
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    }
+  };
+
   return (
     <div className="bg-[#FDFCF8] text-[#3D3D3D] font-sans antialiased min-h-screen flex flex-col relative overflow-x-hidden">
       {/* Falling Flower Petals Canvas */}
@@ -96,7 +104,6 @@ export default function App() {
       <Navbar
         currentTab={currentTab}
         onSelectTab={setCurrentTab}
-        onOpenContribute={() => setIsContributeModalOpen(true)}
         isRefreshing={isRefreshing}
         onRefresh={loadSheetData}
         lastUpdated={lastUpdated}
@@ -130,21 +137,18 @@ export default function App() {
         {currentTab === 'home' && (
           <div className="relative z-10 space-y-6">
             <Hero
-              onOpenContribute={() => setIsContributeModalOpen(true)}
               onViewContributions={handleViewContributions}
+              onViewReceivers={handleViewReceivers}
             />
 
             <StatsGrid stats={stats} isFromCache={isFromCache} />
 
-            <CollectiveGift
-              stats={stats}
-              onOpenContribute={() => setIsContributeModalOpen(true)}
-            />
+            {/* Khushi & Aditya Money Received Section */}
+            <ReceiverBreakdown stats={stats} contributions={allContributions} />
 
-            <RecentLove
-              contributions={allContributions}
-              onOpenContribute={() => setIsContributeModalOpen(true)}
-            />
+            <CollectiveGift stats={stats} />
+
+            <RecentLove contributions={allContributions} />
           </div>
         )}
 
@@ -158,42 +162,26 @@ export default function App() {
                 Showing live records synced directly from our Google Sheet.
               </p>
             </div>
-            <RecentLove
-              contributions={allContributions}
-              onOpenContribute={() => setIsContributeModalOpen(true)}
-            />
+            <RecentLove contributions={allContributions} />
           </div>
         )}
 
         {currentTab === 'hall-of-fame' && (
           <div className="relative z-10">
-            <HallOfFame
-              contributions={allContributions}
-              stats={stats}
-              onOpenContribute={() => setIsContributeModalOpen(true)}
-            />
+            <HallOfFame contributions={allContributions} stats={stats} />
           </div>
         )}
 
         {currentTab === 'wishes' && (
           <div className="relative z-10">
-            <WishesWall
-              contributions={allContributions}
-              onOpenContribute={() => setIsContributeModalOpen(true)}
-            />
+            <WishesWall contributions={allContributions} />
           </div>
         )}
       </main>
 
       {/* Footer */}
       <Footer onSelectTab={setCurrentTab} />
-
-      {/* Contribute Modal */}
-      <ContributeModal
-        isOpen={isContributeModalOpen}
-        onClose={() => setIsContributeModalOpen(false)}
-        onSubmitContribution={handleAddContribution}
-      />
     </div>
   );
 }
+

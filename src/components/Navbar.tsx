@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { Menu, X, RefreshCw, Sparkles, Trophy, Leaf } from 'lucide-react';
+import { Menu, X, RefreshCw, Sparkles, Trophy, ShieldCheck } from 'lucide-react';
 import { ViewTab } from '../types';
 
 interface NavbarProps {
   currentTab: ViewTab;
   onSelectTab: (tab: ViewTab) => void;
-  onOpenContribute: () => void;
   isRefreshing: boolean;
   onRefresh: () => void;
   lastUpdated: Date | null;
@@ -14,7 +13,6 @@ interface NavbarProps {
 export function Navbar({
   currentTab,
   onSelectTab,
-  onOpenContribute,
   isRefreshing,
   onRefresh,
   lastUpdated,
@@ -51,13 +49,13 @@ export function Navbar({
               Teacher's Day
             </span>
             <p className="text-[10px] uppercase tracking-[0.2em] text-[#8C897E] font-semibold leading-none mt-0.5">
-              Gratitude & Contributions
+              1st Year CSE Collection
             </p>
           </div>
         </div>
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-2 lg:gap-4">
+        <nav className="hidden md:flex items-center gap-2 lg:gap-3">
           <button
             onClick={() => handleTabClick('home')}
             className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all ${
@@ -102,37 +100,20 @@ export function Navbar({
           </button>
         </nav>
 
-        {/* Right Actions: Live Sheet Status & Contribute */}
+        {/* Right Actions: Live Sheet Status & Refresh */}
         <div className="flex items-center gap-2 sm:gap-3">
           {/* Live G-Sheets Indicator */}
           <div
             onClick={onRefresh}
             title={lastUpdated ? `Live synced at ${lastUpdated.toLocaleTimeString()} (Click to refresh)` : 'Sync with Google Sheet'}
-            className="hidden sm:flex px-3 py-1.5 bg-[#F5F4EF] hover:bg-[#E5EADF] border border-[#E8E6DF] rounded-full items-center gap-2 cursor-pointer transition-colors"
+            className="flex px-3.5 py-1.5 bg-[#F5F4EF] hover:bg-[#E5EADF] border border-[#E8E6DF] rounded-full items-center gap-2 cursor-pointer transition-colors"
           >
             <div className={`w-2 h-2 rounded-full ${isRefreshing ? 'bg-[#D4A373] animate-spin' : 'bg-emerald-600 animate-pulse'}`} />
             <span className="text-[11px] font-bold uppercase tracking-wider text-[#5A6F54]">
               {isRefreshing ? 'Syncing...' : 'Live G-Sheets'}
             </span>
+            <RefreshCw className={`w-3 h-3 text-[#8C897E] ml-0.5 ${isRefreshing ? 'animate-spin text-[#5A6F54]' : ''}`} />
           </div>
-
-          <button
-            onClick={onRefresh}
-            title="Refresh from Google Sheet"
-            disabled={isRefreshing}
-            className="sm:hidden p-2 text-[#8C897E] hover:text-[#5A6F54] hover:bg-[#F5F4EF] rounded-full transition-all active:scale-95 disabled:opacity-50"
-            aria-label="Refresh data"
-          >
-            <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin text-[#5A6F54]' : ''}`} />
-          </button>
-
-          <button
-            onClick={onOpenContribute}
-            className="bg-[#5A6F54] text-white text-xs sm:text-sm font-semibold tracking-wide uppercase px-4 sm:px-6 py-2.5 rounded-full hover:bg-[#475943] hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all shadow-sm flex items-center gap-1.5 cursor-pointer"
-          >
-            <Leaf className="w-3.5 h-3.5" />
-            <span>Contribute</span>
-          </button>
         </div>
       </div>
 
@@ -188,3 +169,4 @@ export function Navbar({
     </header>
   );
 }
+

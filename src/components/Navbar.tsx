@@ -66,38 +66,8 @@ export function Navbar({
           >
             Dashboard
           </button>
-          <button
-            onClick={() => handleTabClick('contributions')}
-            className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all ${
-              currentTab === 'contributions'
-                ? 'text-[#5A6F54] bg-[#5A6F54]/10 font-semibold'
-                : 'text-[#8C897E] hover:text-[#3D3D3D] hover:bg-[#F5F4EF]'
-            }`}
-          >
-            Contributions
-          </button>
-          <button
-            onClick={() => handleTabClick('hall-of-fame')}
-            className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all flex items-center gap-1.5 ${
-              currentTab === 'hall-of-fame'
-                ? 'text-[#5A6F54] bg-[#5A6F54]/10 font-semibold'
-                : 'text-[#8C897E] hover:text-[#3D3D3D] hover:bg-[#F5F4EF]'
-            }`}
-          >
-            <Trophy className="w-3.5 h-3.5 text-[#D4A373]" />
-            Hall of Fame
-          </button>
-          <button
-            onClick={() => handleTabClick('wishes')}
-            className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all flex items-center gap-1.5 ${
-              currentTab === 'wishes'
-                ? 'text-[#5A6F54] bg-[#5A6F54]/10 font-semibold'
-                : 'text-[#8C897E] hover:text-[#3D3D3D] hover:bg-[#F5F4EF]'
-            }`}
-          >
-            <Sparkles className="w-3.5 h-3.5 text-[#D4A373]" />
-            Wishes Wall
-          </button>
+
+
         </nav>
 
         {/* Right Actions: Live Sheet Status & Refresh */}
@@ -130,39 +100,8 @@ export function Navbar({
               <span>Dashboard</span>
               {currentTab === 'home' && <span className="w-1.5 h-1.5 rounded-full bg-[#5A6F54]" />}
             </button>
-            <button
-              onClick={() => handleTabClick('contributions')}
-              className={`py-3 text-left border-b border-[#E8E6DF] flex items-center justify-between ${
-                currentTab === 'contributions' ? 'text-[#5A6F54] font-bold' : 'text-[#3D3D3D]'
-              }`}
-            >
-              <span>Contributions List</span>
-              {currentTab === 'contributions' && <span className="w-1.5 h-1.5 rounded-full bg-[#5A6F54]" />}
-            </button>
-            <button
-              onClick={() => handleTabClick('hall-of-fame')}
-              className={`py-3 text-left border-b border-[#E8E6DF] flex items-center justify-between ${
-                currentTab === 'hall-of-fame' ? 'text-[#5A6F54] font-bold' : 'text-[#3D3D3D]'
-              }`}
-            >
-              <span className="flex items-center gap-2">
-                <Trophy className="w-4 h-4 text-[#D4A373]" />
-                Hall of Fame & Stats
-              </span>
-              {currentTab === 'hall-of-fame' && <span className="w-1.5 h-1.5 rounded-full bg-[#5A6F54]" />}
-            </button>
-            <button
-              onClick={() => handleTabClick('wishes')}
-              className={`py-3 text-left flex items-center justify-between ${
-                currentTab === 'wishes' ? 'text-[#5A6F54] font-bold' : 'text-[#3D3D3D]'
-              }`}
-            >
-              <span className="flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-[#D4A373]" />
-                Wishes Wall
-              </span>
-              {currentTab === 'wishes' && <span className="w-1.5 h-1.5 rounded-full bg-[#5A6F54]" />}
-            </button>
+
+
           </nav>
         </div>
       )}

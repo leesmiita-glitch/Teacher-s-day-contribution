@@ -20,27 +20,7 @@ export function Hero({ onViewContributions, onViewReceivers }: HeroProps) {
 
   return (
     <section className="relative px-4 sm:px-6 lg:px-8 pt-10 sm:pt-14 pb-14 overflow-hidden flex flex-col items-center text-center z-20">
-      {/* Decorative Natural Watercolor / Botanical Elements */}
-      <div
-        className="absolute -top-10 -left-10 w-48 sm:w-64 h-48 sm:h-64 opacity-40 float-animation pointer-events-none mix-blend-multiply select-none"
-        style={{
-          backgroundImage: `url('https://lh3.googleusercontent.com/aida-public/AB6AXuCEyp6NcazZc7U2NIDxkJ8-WaE0O1XXSXN3LNuaPQY6aPnIhs3cwWbjBY1joElcJJQbk9DPddRxWUjHh6S2u79W4Zke8uU9W2hpJ66gHAMpE2VdNLBXbASO_DbktVfCQTfQBiBZQfAMqUEYGCVEjPTjG08r4nc4Aq1AU-3_wO8CQaM8ExLuFzkJpI82mQWS5PmCxbuliNCvpLq3uGxUSwkFJICSzFV288FM07W0L0XXX7Mvr_zbR3M')`,
-          backgroundSize: 'cover',
-          backgroundRepeat: 'no-repeat',
-        }}
-        aria-hidden="true"
-      />
 
-      <div
-        className="absolute top-10 -right-16 w-56 sm:w-80 h-56 sm:h-80 opacity-35 float-animation pointer-events-none mix-blend-multiply select-none"
-        style={{
-          animationDelay: '-3.5s',
-          backgroundImage: `url('https://lh3.googleusercontent.com/aida-public/AB6AXuDXQzI9zOM3J7d4MuspO8eQ6xmVy5E2LGGvehmV7KDpAmBz71vmRDVVuty_vLqRTAeFDPooYYE6VZDtKzirRM1pMLRdaNN2cMHX12lqYPsDt186lcqY6bZa6vTpsylG--18eu3APGaI0LLTTSP4uwopOvA6u1n-WjEyFADA6-zOdl9zP2NDN4A7iQYY19HXWNWWnZ4McWG3i8JCwe52CsO540uhD6WTZckgrAoAEoxdH1BBJzG5UdY')`,
-          backgroundSize: 'cover',
-          backgroundRepeat: 'no-repeat',
-        }}
-        aria-hidden="true"
-      />
 
       {/* Main Content */}
       <div className="relative z-10 max-w-2xl mx-auto space-y-4">

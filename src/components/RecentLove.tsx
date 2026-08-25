@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Search, MessageSquareHeart, X, CheckCircle2 } from 'lucide-react';
+import { Search, MessageSquareHeart, X, CheckCircle2, ChevronDown, ChevronUp } from 'lucide-react';
 import { Contribution } from '../types';
 
 interface RecentLoveProps {
@@ -9,6 +9,7 @@ interface RecentLoveProps {
 export function RecentLove({ contributions }: RecentLoveProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedContribution, setSelectedContribution] = useState<Contribution | null>(null);
+  const [showAll, setShowAll] = useState(false);
 
   // Filter contributions by search query
   const filtered = useMemo(() => {
@@ -86,7 +87,10 @@ export function RecentLove({ contributions }: RecentLoveProps) {
       </div>
 
       {/* Contributions List */}
-      <div className="space-y-3.5">
+      <div
+        className={`space-y-3.5 ${showAll ? 'max-h-[480px] overflow-y-auto pr-1' : ''}`}
+        style={showAll ? { scrollbarWidth: 'thin', scrollbarColor: '#D4A373 transparent' } : undefined}
+      >
         {filtered.length === 0 ? (
           <div className="bg-white rounded-2xl p-8 text-center text-[#8C897E] border border-[#E8E6DF]">
             <MessageSquareHeart className="w-10 h-10 mx-auto text-[#5A6F54]/40 mb-3" />
@@ -96,7 +100,7 @@ export function RecentLove({ contributions }: RecentLoveProps) {
             </p>
           </div>
         ) : (
-          filtered.map((item, index) => (
+          (showAll ? filtered : filtered.slice(0, 5)).map((item, index) => (
             <div
               key={item.id || index}
               onClick={() => setSelectedContribution(item)}
@@ -147,6 +151,27 @@ export function RecentLove({ contributions }: RecentLoveProps) {
           ))
         )}
       </div>
+
+      {filtered.length > 5 && (
+        <div className="mt-5 flex justify-center">
+          <button
+            onClick={() => setShowAll(!showAll)}
+            className="flex items-center gap-2 px-6 py-2.5 rounded-full border border-[#E8E6DF] bg-white text-sm font-semibold text-[#5A6F54] hover:bg-[#5A6F54] hover:text-white hover:border-[#5A6F54] transition-all duration-300 shadow-sm hover:shadow-md cursor-pointer"
+          >
+            {showAll ? (
+              <>
+                <ChevronUp className="w-4 h-4" />
+                Show Less
+              </>
+            ) : (
+              <>
+                <ChevronDown className="w-4 h-4" />
+                View All ({filtered.length} contributions)
+              </>
+            )}
+          </button>
+        </div>
+      )}
 
       {/* Message Detail Modal when a card is clicked */}
       {selectedContribution && (
@@ -211,4 +236,3 @@ export function RecentLove({ contributions }: RecentLoveProps) {
     </section>
   );
 }
-

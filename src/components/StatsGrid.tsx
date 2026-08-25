@@ -52,11 +52,10 @@ export function StatsGrid({ stats, isFromCache }: StatsGridProps) {
   const strokeOffset = circumference - (circumference * Math.min(csePaid / cseTotal, 1));
 
   return (
-    <section className="px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto py-3 relative z-20 -mt-6 sm:-mt-8">
+    <section className="px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto py-3 relative z-20 -mt-6 sm:-mt-8 overflow-hidden">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
         {/* Total Collection Card */}
         <div className="bg-white rounded-2xl p-5 sm:p-6 border border-[#E8E6DF] border-t-4 border-t-[#5A6F54] shadow-sm hover:shadow-md transition-all duration-300 flex items-center justify-between relative overflow-hidden group">
-          <div className="absolute inset-x-0 top-0 h-[2px] shimmer-effect opacity-70" />
           <div>
             <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#8C897E] mb-1.5 transition-colors group-hover:text-[#5A6F54]">
               Total Collection
@@ -77,7 +76,6 @@ export function StatsGrid({ stats, isFromCache }: StatsGridProps) {
 
         {/* 1st Year CSE Students Paid Circle Card */}
         <div className="bg-white rounded-2xl p-5 sm:p-6 border border-[#E8E6DF] border-t-4 border-t-[#5A6F54] shadow-sm hover:shadow-md transition-all duration-300 flex items-center justify-between relative overflow-hidden group">
-          <div className="absolute inset-x-0 top-0 h-[2px] shimmer-effect opacity-70" />
           <div>
             <div className="flex items-center gap-1.5 mb-1.5">
               <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#5A6F54] bg-[#E5EADF] px-2 py-0.5 rounded-full">
@@ -123,11 +121,10 @@ export function StatsGrid({ stats, isFromCache }: StatsGridProps) {
         </div>
 
         {/* Today's Collection Card */}
-        <div className="bg-white rounded-2xl p-5 sm:p-6 border border-[#E8E6DF] border-t-4 border-t-[#D4A373] shadow-sm hover:shadow-md transition-all duration-300 flex items-center justify-between relative overflow-hidden group sm:col-span-2 lg:col-span-1">
-          <div className="absolute inset-x-0 top-0 h-[2px] shimmer-effect opacity-70" />
+        <div className="bg-white rounded-2xl p-5 sm:p-6 border border-[#E8E6DF] border-t-4 border-t-[#D4A373] shadow-sm hover:shadow-md transition-all duration-300 flex items-center justify-between relative overflow-hidden group">
           <div>
             <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#8C897E] mb-1.5 transition-colors group-hover:text-[#8B6E4E]">
-              Today's Collection
+              Latest's collection
             </p>
             <p className="font-serif text-2xl sm:text-3xl font-bold text-[#8B6E4E] tracking-tight">
               ₹ {formatCurrency(displayToday)}

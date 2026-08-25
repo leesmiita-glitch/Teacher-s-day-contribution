@@ -67,29 +67,7 @@ export function CollectiveGift({ stats }: CollectiveGiftProps) {
             </span>
           </div>
 
-          {/* Milestones Preview */}
-          <div className="mt-8 pt-6 border-t border-[#E8E6DF] grid grid-cols-1 sm:grid-cols-3 gap-3 text-left">
-            {milestones.map((m, idx) => (
-              <div
-                key={idx}
-                className={`p-3.5 rounded-xl border text-xs transition-all ${
-                  m.achieved
-                    ? 'bg-[#E5EADF]/60 border-[#5A6F54]/30 text-[#5A6F54]'
-                    : 'bg-[#FDFCF8] border-[#E8E6DF] text-[#8C897E]'
-                }`}
-              >
-                <div className="flex items-center gap-1.5 font-bold mb-1">
-                  {m.achieved ? (
-                    <CheckCircle2 className="w-3.5 h-3.5 text-[#5A6F54] shrink-0" />
-                  ) : (
-                    <Award className="w-3.5 h-3.5 text-[#D4A373] shrink-0" />
-                  )}
-                  <span className={m.achieved ? 'text-[#3D3D3D]' : 'text-[#8C897E]'}>₹ {formatCurrency(m.target)}</span>
-                </div>
-                <p className="line-clamp-2 leading-relaxed opacity-90">{m.label}</p>
-              </div>
-            ))}
-          </div>
+
         </div>
       </div>
     </section>

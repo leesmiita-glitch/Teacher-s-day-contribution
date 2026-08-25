@@ -12,7 +12,7 @@ const CACHE_STORAGE_KEY = 'teachers_day_sheet_cache_v2';
 
 // 1st Year CSE Batch Configuration
 export const TOTAL_CSE_STUDENTS = 52;
-export const DEFAULT_TARGET_AMOUNT = 8000;
+export const DEFAULT_TARGET_AMOUNT = 5200;
 
 export function normalizeReceiver(receiverRaw: string): string {
   if (!receiverRaw) return 'Unassigned';
